@@ -51,9 +51,9 @@ Once the code is uploaded and the sensors are connected, the sensor will start r
 ## Future Improvements
 
 - Static IP configuration support
-- Support for additional sensor types
-- Enhanced SNMP functionality (e.g., traps for alerting)
-- Web interface improvements with charts and historical data
+- External status LED (for box indication)
+- Issue with saving special characters - to be fixed
+- MAC address display on the web server
 
 ## Contributing
 
