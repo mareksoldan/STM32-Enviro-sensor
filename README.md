@@ -1,97 +1,66 @@
+
 # LAN/SNMP Environmental Sensor
 
-This project is a LAN/SNMP environmental sensor using STM32F103C8T6, W5500 Ethernet Module, and AM2301 sensors for monitoring temperature and humidity.
+This project is a LAN/SNMP environmental sensor based on the STM32F103C8T6 microcontroller. It utilizes the W5500 Ethernet module to communicate over a network and features temperature and humidity sensing capabilities with the AM2301 (DHT21) sensor.
+
+## Table of Contents
+
+- [Components](#components)
+- [Wiring Diagram](#wiring-diagram)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
 
 ## Components
 
-- **STM32F103C8T6** - Microcontroller
-- **W5500 Module TCP/IP Ethernet Module** - Ethernet communication
-- **AM2301 (DHT21)** - Temperature and humidity sensors
-- **D4012SA 3.3V** - Power regulator
-- **ST-LINK V2** - Programmer
+- **Microcontroller**: STM32F103C8T6
+- **Ethernet Module**: W5500 TCP/IP Ethernet Module
+- **Temperature and Humidity Sensors**: AM2301 (DHT21)
+- **Voltage Regulator**: D4012SA 3.3V
+- **Programmer**: ST-Link V2
 
-## Wiring
+## Wiring Diagram
 
-### STM32 to W5500 Ethernet Module
-- `PA4` <-> `CS`
-- `PA5` <-> `SCK`
-- `PA6` <-> `MISO`
-- `PA7` <-> `MOSI`
+```plaintext
+STM32F103C8T6 <-> W5500 Module
+PA4 (CS) <-> CS
+PA5 (SCK) <-> SCK
+PA6 (MISO) <-> MISO
+PA7 (MOSI) <-> MOSI
 
-### STM32 to AM2301 (DHT21)
-- `PA1` <-> Sensor 1 (temperature and humidity)
-- `PA2` <-> Sensor 2 (temperature and humidity)
-
-### Power Supply
-The W5500 Ethernet Module requires an external power supply.
-
-## Features
-
-- Monitor temperature and humidity using two DHT21 sensors.
-- SNMP communication over LAN using W5500 Ethernet module.
-- Web-based configuration interface for device settings (name, location, description, contact).
-- LED status indicator for network connection status.
-- EEPROM-based storage for user settings (device name, location, etc.).
-
-## Set up the Environment
-
-### Prerequisites
-Ensure you have the following tools and libraries installed:
-
-- STM32 Core for Arduino IDE
-- FlashStorage_STM32
-- Ethernet library
-- SNMP library
-- DHT library
-
-### Cloning the Repository
-
-To clone this repository, run the following command:
-
-```bash
-git clone <repository_url>
+AM2301 (DHT21) <-> STM32F103C8T6
+Sensor 1 <-> PA1
+Sensor 2 <-> PA2
 ```
 
-### Programming the STM32
+## Setup
 
-1. Connect the STM32 board to your computer using the ST-LINK V2 programmer.
-2. Open the `.ino` project in Arduino IDE.
-3. Select the appropriate board (`STM32F103C8T6`) and upload the code.
+1. Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
+2. Open the project in your preferred IDE.
+3. Upload the code to your STM32 microcontroller using the ST-Link V2 programmer.
 
-### Configuring the Device
+## Usage
 
-After flashing the code, configure the device using a web browser:
+Once the code is uploaded and the sensors are connected, the sensor will start reporting temperature and humidity over the network using SNMP. You can access the data by querying the SNMP agent.
 
-1. Connect the device to your local network.
-2. Open the device's IP address in a browser.
-3. Configure the device name, location, description, and contact details via the web interface.
+## Future Improvements
 
-## SNMP Configuration
+- Static IP configuration support
+- Support for additional sensor types
+- Enhanced SNMP functionality (e.g., traps for alerting)
+- Web interface improvements with charts and historical data
 
-The device supports SNMP (Simple Network Management Protocol) and responds to the following OIDs:
+## Contributing
 
-- `1.3.6.1.2.1.1.5.0` - System Name
-- `1.3.6.1.2.1.1.1.0` - System Description
-- `1.3.6.1.2.1.1.6.0` - System Location
-- `1.3.6.1.2.1.1.4.0` - System Contact
-- `1.3.6.1.2.1.1.3.0` - System Uptime
-- `1.3.6.1.4.1.148.1.1.1` - Sensor 1 Temperature
-- `1.3.6.1.4.1.148.1.1.2` - Sensor 1 Humidity
-- `1.3.6.1.4.1.148.1.2.1` - Sensor 2 Temperature
-- `1.3.6.1.4.1.148.1.2.2` - Sensor 2 Humidity
+Contributions are welcome! To contribute:
 
-### Default SNMP Settings
-
-- **Community**: `read`
-- **Version**: `v1` or `v2c`
-
-## Status LED
-
-The status LED on pin `PC13` indicates the network connection status:
-
-- **DHCP Waiting**: LED blinks every 500ms.
-- **Running**: LED blinks every 3 seconds.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-branch-name`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature-branch-name`
+5. Submit a pull request.
