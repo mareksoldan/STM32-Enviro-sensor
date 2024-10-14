@@ -34,6 +34,8 @@ Sensor 1 <-> PA1
 Sensor 2 <-> PA2
 ```
 
+![Wiring schema.](/schema1.png)
+
 ## Setup
 
 1. Clone the repository:
