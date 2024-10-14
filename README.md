@@ -1,77 +1,97 @@
-# STM32 Enviro Sensor (LAN/SNMP)
+# LAN/SNMP Environmental Sensor
 
-This project implements a DIY environmental sensor for measuring temperature and humidity, based on the STM32 microcontroller with LAN connectivity and SNMP support. It allows you to monitor environmental conditions remotely via web or SNMP.
-
-## Features
-
-- **LAN Connectivity**: Uses the W5500 Ethernet module (currently only DHCP).
-- **Supports Two Sensors**: Can connect two DHT21 (AM2301) temperature and humidity sensors.
-- **SNMP Support**: Provides environmental data via SNMP, including standard SNMP values.
-- **SNMP Values Implemented**:
-  - Uptime, Device Name, Location, Description, Contact
-  - Temperature 1, Humidity 1, Temperature 2, Humidity 2
-- **Web Server**: Displays sensor data on a basic web interface.
-- **EEPROM Storage**: Saves device name, location, description, and contact information in EEPROM.
+This project is a LAN/SNMP environmental sensor using STM32F103C8T6, W5500 Ethernet Module, and AM2301 sensors for monitoring temperature and humidity.
 
 ## Components
 
-- **Microcontroller**: STM32F103C8T6 (Blue Pill)
-- **Ethernet Module**: W5500 Module TCP/IP Ethernet
-- **Sensors**: AM2301 (DHT21) for temperature and humidity
-- **Power**: D4012SA 3.3V for powering components
-- **Programmer**: ST-Link V2 for flashing firmware
+- **STM32F103C8T6** - Microcontroller
+- **W5500 Module TCP/IP Ethernet Module** - Ethernet communication
+- **AM2301 (DHT21)** - Temperature and humidity sensors
+- **D4012SA 3.3V** - Power regulator
+- **ST-LINK V2** - Programmer
 
-## Wiring Diagram
+## Wiring
 
-### Ethernet (W5500)
-- PA4 <-> CS
-- PA5 <-> SCK
-- PA6 <-> MISO
-- PA7 <-> MOSI
+### STM32 to W5500 Ethernet Module
+- `PA4` <-> `CS`
+- `PA5` <-> `SCK`
+- `PA6` <-> `MISO`
+- `PA7` <-> `MOSI`
 
-### Sensors (AM2301/DHT21)
-- Sensor 1 <-> PA1
-- Sensor 2 <-> PA2
+### STM32 to AM2301 (DHT21)
+- `PA1` <-> Sensor 1 (temperature and humidity)
+- `PA2` <-> Sensor 2 (temperature and humidity)
 
-## How to Use
+### Power Supply
+The W5500 Ethernet Module requires an external power supply.
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/yourusername/STM32-Enviro-sensor.git
+## Features
 
-Set up the Environment:
+- Monitor temperature and humidity using two DHT21 sensors.
+- SNMP communication over LAN using W5500 Ethernet module.
+- Web-based configuration interface for device settings (name, location, description, contact).
+- LED status indicator for network connection status.
+- EEPROM-based storage for user settings (device name, location, etc.).
 
-Install the Arduino IDE or PlatformIO.
-Install the necessary libraries:
-Ethernet
-SNMP
-DHT
-FlashStorage_STM32
-Configure the Sensor:
+## Set up the Environment
 
-The system will use DHCP for LAN configuration.
-Modify the SNMP OID values in the code to match your specific requirements if needed.
-Upload the Code:
+### Prerequisites
+Ensure you have the following tools and libraries installed:
 
-Connect the STM32 board to your computer via the ST-Link V2 programmer.
-Upload the .ino file using the Arduino IDE or PlatformIO.
-Access the Web Interface:
+- STM32 Core for Arduino IDE
+- FlashStorage_STM32
+- Ethernet library
+- SNMP library
+- DHT library
 
-Once the board is connected to your network, you can access the web interface using the assigned IP address. The web interface will display the sensor data and allow for device information updates.
-SNMP Configuration:
+### Cloning the Repository
 
-Use an SNMP tool (such as Net-SNMP) to retrieve sensor data via the provided SNMP OIDs.
-Default SNMP community: read
-Default SNMP OIDs
-1.3.6.1.2.1.1.2.0: sysObjectID
-1.3.6.1.2.1.1.5.0: sysName (Device Name)
-1.3.6.1.2.1.1.6.0: sysLocation
-1.3.6.1.2.1.1.1.0: sysDescription
-1.3.6.1.2.1.1.4.0: sysContact
-1.3.6.1.2.1.1.3.0: sysUptime
-1.3.6.1.4.1.148.1.1.1: Sensor 1 Temperature
-1.3.6.1.4.1.148.1.1.2: Sensor 1 Humidity
-1.3.6.1.4.1.148.1.2.1: Sensor 2 Temperature
-1.3.6.1.4.1.148.1.2.2: Sensor 2 Humidity
-Web Interface
-The web interface shows the current temperature and humidity values from both sensors and allows updating device details such as name, location, description, and contact.
+To clone this repository, run the following command:
+
+```bash
+git clone <repository_url>
+```
+
+### Programming the STM32
+
+1. Connect the STM32 board to your computer using the ST-LINK V2 programmer.
+2. Open the `.ino` project in Arduino IDE.
+3. Select the appropriate board (`STM32F103C8T6`) and upload the code.
+
+### Configuring the Device
+
+After flashing the code, configure the device using a web browser:
+
+1. Connect the device to your local network.
+2. Open the device's IP address in a browser.
+3. Configure the device name, location, description, and contact details via the web interface.
+
+## SNMP Configuration
+
+The device supports SNMP (Simple Network Management Protocol) and responds to the following OIDs:
+
+- `1.3.6.1.2.1.1.5.0` - System Name
+- `1.3.6.1.2.1.1.1.0` - System Description
+- `1.3.6.1.2.1.1.6.0` - System Location
+- `1.3.6.1.2.1.1.4.0` - System Contact
+- `1.3.6.1.2.1.1.3.0` - System Uptime
+- `1.3.6.1.4.1.148.1.1.1` - Sensor 1 Temperature
+- `1.3.6.1.4.1.148.1.1.2` - Sensor 1 Humidity
+- `1.3.6.1.4.1.148.1.2.1` - Sensor 2 Temperature
+- `1.3.6.1.4.1.148.1.2.2` - Sensor 2 Humidity
+
+### Default SNMP Settings
+
+- **Community**: `read`
+- **Version**: `v1` or `v2c`
+
+## Status LED
+
+The status LED on pin `PC13` indicates the network connection status:
+
+- **DHCP Waiting**: LED blinks every 500ms.
+- **Running**: LED blinks every 3 seconds.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
